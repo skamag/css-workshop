@@ -25,6 +25,14 @@
         justify-content: center;
         align-items: center;
         gap: 100px;
+        /* background-image: linear-gradient(
+          43deg,
+          #4158d0 0%,
+          #c850c0 46%,
+          #ffcc70 100%
+        ); */
+        /* background: linear-gradient(43deg, #ffcccc, #edff77, #78f6ff); */
+        /* background: radial-gradient(circle, #000000, #111111, #000000); */
         overflow: hidden;
       }
 
@@ -59,12 +67,16 @@
         width: 100px;
         height: 100px;
         perspective: 400px;
+        /* width: 200px;
+        height: 200px;
+        perspective: 800px; */
       }
       .cube {
         width: 100%;
         height: 100%;
         position: relative;
         transform-style: preserve-3d;
+        /* animation: float 15s ease-in-out infinite; */
         animation: cube-float 15s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         cursor: pointer;
       }
@@ -72,14 +84,26 @@
         position: absolute;
         width: 100px;
         height: 100px;
+        /* width: 200px;
+        height: 200px; */
+        /* background-image: radial-gradient(
+          ellipse at top,
+          rgba(217, 255, 0, 0.1),
+          rgba(0, 208, 255, 0.1),
+          rgba(255, 0, 195, 0.1)
+        ); */
         /* background-image: radial-gradient(
           ellipse at top,
           rgba(196, 240, 255, 0.075),
           rgba(60, 105, 159, 0.075),
           rgba(37, 42, 53, 0.075)
         ); */
+        /* background: rgba(70, 71, 105, 0.2); */
         border: 2px solid rgba(0, 0, 0, 0.375);
         box-shadow: 0 0 10px rgba(31, 31, 48, 0.375);
+        /* box-shadow: 0 0 20px rgba(31, 31, 48, 0.6); */
+        /* border: 2px solid rgba(0, 255, 255, 0.5);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); */
         border-radius: 2.5px;
         transition: all 0.5s ease;
         backdrop-filter: blur(1px);
@@ -92,35 +116,49 @@
       }
       .front {
         transform: translateZ(50px);
+        /* transform: translateZ(100px); */
       }
       .front::after {
-        content: "Take on me";
+        /* content: ""; */
+        content: "Hover me";
+        /* content: "Take on me..."; */
+        /* content: "iCube"; */
         align-content: center;
+        /* content: "Hello, Cube!"; */
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         font-size: 10px;
+        /* font-size: 20px; */
+        /* color: rgba(45, 45, 45, 0.7); */
+        /* color: rgba(255, 255, 255, 0.7); */
         animation: front-text 15s ease-in infinite;
         color: rgba(0, 0, 0, 0.75);
       }
       .front:hover::after {
-        content: "Take me on.";
+        /* content: ""; */
+        /* content: "Take me on."; */
       }
       .back {
         transform: rotateY(180deg) translateZ(50px);
+        /* transform: rotateY(180deg) translateZ(100px); */
       }
       .right {
         transform: rotateY(90deg) translateZ(50px);
+        /* transform: rotateY(90deg) translateZ(100px); */
       }
       .left {
         transform: rotateY(-90deg) translateZ(50px);
+        /* transform: rotateY(-90deg) translateZ(100px); */
       }
       .top {
         transform: rotateX(90deg) translateZ(50px);
+        /* transform: rotateX(90deg) translateZ(100px); */
       }
       .bottom {
         transform: rotateX(-90deg) translateZ(50px);
+        /* transform: rotateX(-90deg) translateZ(100px); */
       }
 
       /* Cube date */
@@ -159,16 +197,24 @@
       }
       .date .hand-1 {
         width: 3px;
-
+        /* height: 80px;
+        width: 6px; */
         transform: rotateZ(-30deg) translateY(20px);
+        /* transform: rotateZ(-30deg) translateY(40px); */
       }
       .date .hand-2 {
         width: 3px;
+        /* height: 80px;
+        width: 6px; */
         transform: rotateZ(-165deg) translateY(20px);
+        /* transform: rotateZ(-165deg) translateY(40px); */
       }
       .date .hand-3 {
         width: 1px;
+        /* height: 80px;
+        width: 2px; */
         transform: rotateZ(90deg) translateY(20px);
+        /* transform: rotateZ(90deg) translateY(40px); */
         animation: seconds-hand 15s infinite steps(1);
       }
 
@@ -182,10 +228,12 @@
         justify-content: center;
         align-items: center;
         gap: 0.5rem;
+        /* gap: 1rem; */
         animation: phone-display 15s infinite;
       }
       .phone-container i {
         font-size: 25px;
+        /* font-size: 50px; */
         animation: phone-vibration 0.5s infinite;
       }
 
@@ -197,22 +245,30 @@
         flex-direction: column;
         gap: 0.5rem;
         padding: 0 20%;
+        /* gap: 1rem;
+        padding: 0 3rem; */
         animation: chat-display 15s infinite;
       }
       .chat-text {
         animation: show-chat-text 15s cubic-bezier(0, 0.75, 0.25, 1) infinite;
         opacity: 0;
       }
+
       .chat-container .text-1 {
+        /* background-color: aqua; */
         align-self: flex-start;
+        /* color: red; */
       }
       .chat-container .text-2 {
         align-self: flex-end;
         transform: scaleX(-1);
+        /* background-color: aquamarine; */
         animation-delay: 1s;
       }
       .chat-container div i {
         font-size: 1.5rem;
+        /* font-size: 3rem; */
+        /* color: red; */
       }
 
       /* Header animations */
@@ -234,6 +290,7 @@
           content: "Browser game";
         }
         25% {
+          /* content: "Personal site"; */
           content: "Online store";
         }
         50% {
@@ -336,6 +393,29 @@
           transform: rotateZ(130deg) translateY(20px);
         }
       }
+      @keyframes clock-background {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        25% {
+          opacity: 0;
+          height: 10px;
+          /* height: 20px; */
+          animation-timing-function: cubic-bezier(1, 0, 0.75, 1);
+        }
+        50% {
+          opacity: 1;
+          height: 40px;
+          /* height: 80px; */
+          animation-timing-function: cubic-bezier(0.75, 0, 0.25, 1);
+        }
+        75% {
+          opacity: 0;
+          height: 10px;
+          /* height: 20px; */
+        }
+      }
 
       /* Phone animations */
       @keyframes phone-display {
@@ -368,6 +448,23 @@
           transform: rotate(2deg);
         }
       }
+
+      /* Chat animations */
+      /* @keyframes chat-display {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 0;
+          animation-timing-function: cubic-bezier(1, 0, 0.75, 1);
+        }
+        75% {
+          opacity: 1;
+          animation-timing-function: cubic-bezier(0.75, 0, 0.25, 1);
+        }
+      } */
+
       @keyframes show-chat-text {
         0%,
         65%,
@@ -399,6 +496,7 @@
         <div class="side right">
           <div class="date">
             <p id="day">02.01.2025</p>
+            <!-- <div id="clock"></div> -->
             <p id="time"></p>
             <div class="date-background">
               <div class="hand hand-1"></div>
