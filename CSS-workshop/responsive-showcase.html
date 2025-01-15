@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Container Animation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #111;
+        font-family: Arial, sans-serif;
+        color: white;
+      }
+
+      .container {
+        position: relative;
+        width: 50vw;
+        height: 50vh;
+        background: linear-gradient(135deg, #0077ff, #00ffcc);
+        overflow: hidden;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 1s ease-in-out;
+      }
+
+      .content {
+        text-align: center;
+        padding: 10px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .content h1 {
+        font-size: 2vw;
+        margin-bottom: 10px;
+      }
+
+      .content p {
+        font-size: 1vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="animatedContainer">
+      <div class="content">
+        <h1>Responsive Content</h1>
+        <p>This content adjusts based on the container size.</p>
+      </div>
+    </div>
+
+    <script>
+      const container = document.getElementById("animatedContainer")
+
+      const shapes = [
+        { width: "50vw", height: "50vh" }, // Initial 1:1 shape
+        { width: "40vw", height: "30vw" }, // 4:3 landscape
+        { width: "30vw", height: "40vw" }, // 3:4 portrait
+        { width: "40vw", height: "20vw" }, // 8:4
+        { width: "20vw", height: "40vw" }, // 4:8
+      ]
+
+      let currentShape = 0
+
+      setInterval(() => {
+        currentShape = (currentShape + 1) % shapes.length
+        const { width, height } = shapes[currentShape]
+        container.style.width = width
+        container.style.height = height
+      }, 3000) // Change shape every 3 seconds
+    </script>
+  </body>
+</html>

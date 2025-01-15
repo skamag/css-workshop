@@ -1,0 +1,680 @@
+$tileSize: 100px;
+
+// textures
+$floorColor: #c80;
+$floorGrid: darken($floorColor, 52.3%);
+$ceilingColor: #ccc;
+$ceilBrickLine: darken($ceilingColor, 26.6%);
+
+// animation variables
+$moves: 63;
+$moveDur: 0.8s;
+$animDur: $moveDur * $moves;
+$delay: 2s;
+$movePer: 100% / $moves;
+
+// camera variables
+$zStart: 4;
+$yView: $tileSize * -0.5;
+
+@mixin wall($x, $y, $w, $dir) {
+  bottom: $y * $tileSize;
+  left: $x * $tileSize;
+  width: $w * $tileSize;
+  @if $dir == "h" {
+    transform: rotateX(-90deg);
+  }
+  @if $dir == "v" {
+    transform: rotateX(-90deg) rotateY(90deg);
+  }
+}
+
+body {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+  overflow: hidden;
+  perspective: 800px;
+  -webkit-perspective: 800px;
+  /* for dealing with what is seen above the fold */
+  margin-top: -20%;
+}
+.container {
+  width: $tileSize * 9;
+  height: $tileSize * 9;
+  transform: rotateX(90deg);
+  transform-style: preserve-3d;
+}
+.board {
+  animation: camera $animDur $delay linear forwards;
+  background-color: $floorColor;
+  //background-image: repeating-linear-gradient(transparent, transparent ($tileSize - 1), $floorGrid ($tileSize - 1), $floorGrid $tileSize), repeating-linear-gradient(90deg, transparent, transparent ($tileSize - 1), $floorGrid ($tileSize - 1), $floorGrid $tileSize);
+  width: $tileSize * 9;
+  height: $tileSize * 9;
+  transform: translate3d($tileSize * 4, $tileSize * ($zStart + 0), $yView)
+    rotateZ(0deg);
+  transform-origin: $tileSize * 0.5 $tileSize * 7.5 0;
+  transform-style: preserve-3d;
+}
+.ceiling {
+  background-color: $ceilingColor;
+  background-image: repeating-linear-gradient(
+    $ceilBrickLine,
+    $ceilBrickLine 1%,
+    transparent 1%,
+    transparent 24%,
+    $ceilBrickLine 24%,
+    $ceilBrickLine 25%
+  );
+  background-size: $tileSize $tileSize;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transform: translateZ($tileSize);
+  .tile-top,
+  .tile-bottom {
+    background-size: $tileSize $tileSize/2;
+    display: block;
+    width: 100%;
+    height: $tileSize/4;
+  }
+  .tile-top {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 24%,
+      $ceilBrickLine 24%,
+      $ceilBrickLine 25%,
+      transparent 25%,
+      transparent 74%,
+      $ceilBrickLine 74%,
+      $ceilBrickLine 75%,
+      transparent 75%,
+      transparent
+    );
+  }
+  .tile-bottom {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 49%,
+      $ceilBrickLine 49%,
+      $ceilBrickLine 50%
+    );
+  }
+}
+.wall {
+  animation: raiseWalls $delay ($animDur + ($delay - $moveDur)) linear
+      alternate-reverse forwards,
+    raiseWalls $delay linear alternate;
+  background-image: repeating-linear-gradient(
+      #fff,
+      #fff 5%,
+      #900 5%,
+      #900 25%,
+      #fff 25%,
+      #fff 29%,
+      transparent 29%,
+      transparent 50%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #900,
+      #900 23%,
+      #fff 23%,
+      #fff 27%,
+      #900 27%,
+      #900 50%
+    );
+  background-size: $tileSize $tileSize;
+  color: #fff;
+  position: absolute;
+  height: $tileSize;
+  transform-origin: 0 100%;
+  .wall-half {
+    background-image: repeating-linear-gradient(
+      90deg,
+      #fff,
+      #fff 3%,
+      transparent 3%,
+      transparent 48%,
+      #fff 48%,
+      #fff 50%
+    );
+    background-size: $tileSize $tileSize;
+    display: block;
+    margin-bottom: $tileSize / 4;
+    width: 100%;
+    height: $tileSize / 4;
+  }
+  // wall() syntax: x-pos, y-pos, length in tiles, direction ("h" or "v")
+  // side walls
+  &:nth-of-type(1) {
+    @include wall(0, 0, 9, "h");
+  }
+  &:nth-of-type(2) {
+    @include wall(0, 9, 9, "h");
+  }
+  &:nth-of-type(3) {
+    @include wall(0, 0, 9, "v");
+  }
+  &:nth-of-type(4) {
+    @include wall(9, 0, 9, "v");
+  }
+
+  // horizontal walls
+  &:nth-of-type(5) {
+    @include wall(3, 1, 2, "h");
+  }
+  &:nth-of-type(6) {
+    @include wall(6, 1, 3, "h");
+  }
+  &:nth-of-type(7) {
+    @include wall(3, 2, 3, "h");
+  }
+  &:nth-of-type(8) {
+    @include wall(1, 3, 2, "h");
+  }
+  &:nth-of-type(9) {
+    @include wall(1, 4, 1, "h");
+  }
+  &:nth-of-type(10) {
+    @include wall(4, 4, 2, "h");
+  }
+  &:nth-of-type(11) {
+    @include wall(7, 4, 1, "h");
+  }
+  &:nth-of-type(12) {
+    @include wall(0, 5, 1, "h");
+  }
+  &:nth-of-type(13) {
+    @include wall(3, 5, 1, "h");
+  }
+  &:nth-of-type(14) {
+    @include wall(6, 5, 3, "h");
+  }
+  &:nth-of-type(15) {
+    @include wall(2, 6, 1, "h");
+  }
+  &:nth-of-type(16) {
+    @include wall(4, 6, 2, "h");
+  }
+  &:nth-of-type(17) {
+    @include wall(7, 6, 1, "h");
+  }
+  &:nth-of-type(18) {
+    @include wall(1, 7, 1, "h");
+  }
+  &:nth-of-type(19) {
+    @include wall(3, 7, 2, "h");
+  }
+  &:nth-of-type(20) {
+    @include wall(7, 7, 1, "h");
+  }
+  &:nth-of-type(21) {
+    @include wall(1, 8, 1, "h");
+  }
+  &:nth-of-type(22) {
+    @include wall(3, 8, 1, "h");
+  }
+  &:nth-of-type(23) {
+    @include wall(5, 8, 3, "h");
+  }
+
+  // vertical walls
+  &:nth-of-type(24) {
+    @include wall(1, 0, 1, "v");
+  }
+  &:nth-of-type(25) {
+    @include wall(1, 2, 3, "v");
+  }
+  &:nth-of-type(26) {
+    @include wall(1, 6, 2, "v");
+  }
+  &:nth-of-type(27) {
+    @include wall(2, 1, 2, "v");
+  }
+  &:nth-of-type(28) {
+    @include wall(2, 4, 2, "v");
+  }
+  &:nth-of-type(29) {
+    @include wall(2, 8, 1, "v");
+  }
+  &:nth-of-type(30) {
+    @include wall(3, 0, 1, "v");
+  }
+  &:nth-of-type(31) {
+    @include wall(3, 4, 2, "v");
+  }
+  &:nth-of-type(32) {
+    @include wall(4, 2, 2, "v");
+  }
+  &:nth-of-type(33) {
+    @include wall(4, 5, 1, "v");
+  }
+  &:nth-of-type(34) {
+    @include wall(4, 7, 1, "v");
+  }
+  &:nth-of-type(35) {
+    @include wall(5, 2, 1, "v");
+  }
+  &:nth-of-type(36) {
+    @include wall(5, 4, 4, "v");
+  }
+  &:nth-of-type(37) {
+    @include wall(6, 3, 1, "v");
+  }
+  &:nth-of-type(38) {
+    @include wall(6, 6, 1, "v");
+  }
+  &:nth-of-type(39) {
+    @include wall(7, 0, 2, "v");
+  }
+  &:nth-of-type(40) {
+    @include wall(7, 3, 2, "v");
+  }
+  &:nth-of-type(41) {
+    @include wall(7, 6, 1, "v");
+  }
+  &:nth-of-type(42) {
+    @include wall(8, 2, 2, "v");
+  }
+  &:nth-of-type(43) {
+    @include wall(8, 5, 1, "v");
+  }
+}
+
+.marker {
+  font: 22pt Helvetica;
+  position: absolute;
+  opacity: 0.8;
+  text-align: center;
+  transform-style: preserve-3d;
+}
+
+.start {
+  background: #ccc;
+  bottom: $tileSize * 1.67;
+  left: $tileSize * 0.1;
+  width: $tileSize * 0.8;
+  height: $tileSize * 0.4;
+  line-height: $tileSize * 0.4;
+  transform: translateZ($tileSize * 0.5) rotateX(-90deg);
+  animation: startPoint $delay ($animDur + ($delay - $moveDur)) linear
+      alternate-reverse forwards,
+    startPoint $delay linear alternate;
+}
+
+.finish {
+  background: #ff0;
+  border-radius: 50%;
+  top: $tileSize * 0.25;
+  left: $tileSize * 1.67;
+  width: $tileSize * 0.5;
+  height: $tileSize * 0.5;
+  font-weight: bold;
+  line-height: $tileSize * 0.45;
+  transform: translateZ($tileSize * 0.5) rotateX(-90deg) rotateY(90deg)
+    rotateZ(90deg);
+  animation: finPoint $delay ($animDur + ($delay - $moveDur)) linear
+      alternate-reverse forwards,
+    finPoint $delay linear alternate;
+}
+
+@keyframes raiseWalls {
+  from {
+    height: 0;
+  }
+  to {
+    height: $tileSize;
+  }
+}
+
+@keyframes startPoint {
+  from {
+    transform: scale3d(1, 0, 0) translateZ($tileSize * 0) rotateX(-90deg);
+  }
+  to {
+    transform: scale3d(1, 1, 1) translateZ($tileSize * 0.5) rotateX(-90deg);
+  }
+}
+
+@keyframes finPoint {
+  from {
+    transform: scale3d(1, 0, 0) translateZ($tileSize * 0) rotateX(-90deg)
+      rotateY(90deg) rotateZ(90deg);
+  }
+  to {
+    transform: scale3d(1, 1, 1) translateZ($tileSize * 0.5) rotateX(-90deg)
+      rotateY(90deg) rotateZ(90deg);
+  }
+}
+
+@keyframes camera {
+  #{$movePer * 0} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 0), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 8.5 0;
+  }
+  #{$movePer * 1} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 1), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 2} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 1), $yView)
+      rotateZ(-90deg);
+  }
+  #{$movePer * 3} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 2), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 4} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 1), $yView)
+      rotateZ(-180deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 5} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 2), $yView)
+      rotateZ(-180deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 6} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 0), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 8.5 0;
+  }
+  #{$movePer * 7} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 0), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 8.5 0;
+  }
+  #{$movePer * 8} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 0), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 8.5 0;
+  }
+  #{$movePer * 9} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 1), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 8.5 0;
+  }
+  #{$movePer * 10} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 1), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 11} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 2), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 12} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 3), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 13} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 4), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 14} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 5), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 15} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 1), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 16} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 2), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 17} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 3), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 18} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 4), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 7.5 0;
+  }
+  #{$movePer * 19} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 4), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 20} {
+    transform: translate3d($tileSize * -1, $tileSize * ($zStart + 4), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 5.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 21} {
+    transform: translate3d($tileSize * -1, $tileSize * ($zStart + 4), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 5.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 22} {
+    transform: translate3d($tileSize * -1, $tileSize * ($zStart + 5), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 5.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 23} {
+    transform: translate3d($tileSize * -1, $tileSize * ($zStart + 5), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 5.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 24} {
+    transform: translate3d($tileSize * -1, $tileSize * ($zStart + 6), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 5.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 25} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 5), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 26} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 6), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 27} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 7), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 28} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 7), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 29} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 8), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 30} {
+    transform: translate3d($tileSize * -2, $tileSize * ($zStart + 9), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 6.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 31} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 7), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 32} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 8), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 1.5 0;
+  }
+  #{$movePer * 33} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 8), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 34} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 9), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 35} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 10), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 36} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 11), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 37} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 12), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 38} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 13), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 39} {
+    transform: translate3d($tileSize * -4, $tileSize * ($zStart + 14), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 8.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 40} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 8), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 41} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 9), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 42} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 10), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 43} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 6), $yView)
+      rotateZ(270deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 44} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 7), $yView)
+      rotateZ(270deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 45} {
+    transform: translate3d($tileSize * 2, $tileSize * ($zStart + 8), $yView)
+      rotateZ(270deg);
+    transform-origin: $tileSize * 2.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 46} {
+    transform: translate3d($tileSize * 0, $tileSize * ($zStart + 6), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 4.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 47} {
+    transform: translate3d($tileSize * 0, $tileSize * ($zStart + 7), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 4.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 48} {
+    transform: translate3d($tileSize * 0, $tileSize * ($zStart + 8), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 4.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 49} {
+    transform: translate3d($tileSize * 0, $tileSize * ($zStart + 9), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 4.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 50} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 6), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 51} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 7), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 52} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 8), $yView)
+      rotateZ(180deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 2.5 0;
+  }
+  #{$movePer * 53} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 4), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 54} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 5), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 4.5 0;
+  }
+  #{$movePer * 55} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 5), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 56} {
+    transform: translate3d($tileSize * 3, $tileSize * ($zStart + 6), $yView)
+      rotateZ(90deg);
+    transform-origin: $tileSize * 1.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 57} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 5), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 58} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 6), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 59} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 7), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 3.5 0;
+  }
+  #{$movePer * 60} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 8), $yView)
+      rotateZ(0deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 61} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 8), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 0.5 0;
+  }
+  #{$movePer * 62} {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 9), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 0.5 0;
+  }
+  100% {
+    transform: translate3d($tileSize * 4, $tileSize * ($zStart + 9), $yView)
+      rotateZ(-90deg);
+    transform-origin: $tileSize * 0.5 $tileSize * 0.5 0;
+  }
+}

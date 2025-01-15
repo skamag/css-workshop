@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GameCube Menu</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: radial-gradient(circle, #202020, #000);
+        font-family: Arial, sans-serif;
+      }
+
+      .scene {
+        width: 300px;
+        height: 300px;
+        perspective: 1000px;
+      }
+
+      .cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotateCube 10s infinite linear;
+      }
+
+      .cube div {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .front {
+        transform: translateZ(150px);
+      }
+      .back {
+        transform: rotateY(180deg) translateZ(150px);
+      }
+      .right {
+        transform: rotateY(90deg) translateZ(150px);
+      }
+      .left {
+        transform: rotateY(-90deg) translateZ(150px);
+      }
+      .top {
+        transform: rotateX(90deg) translateZ(150px);
+      }
+      .bottom {
+        transform: rotateX(-90deg) translateZ(150px);
+      }
+
+      @keyframes rotateCube {
+        0% {
+          transform: rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: rotateX(90deg) rotateY(0deg);
+        }
+        50% {
+          transform: rotateX(90deg) rotateY(90deg);
+        }
+        75% {
+          transform: rotateX(180deg) rotateY(90deg);
+        }
+        100% {
+          transform: rotateX(180deg) rotateY(180deg);
+        }
+      }
+
+      .cube:hover {
+        animation-play-state: paused;
+      }
+
+      .cube div:hover {
+        background: rgba(0, 0, 50, 0.8);
+        border: 2px solid rgba(0, 150, 255, 0.8);
+        color: rgba(0, 150, 255, 1);
+        box-shadow: 0 0 20px rgba(0, 150, 255, 0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scene">
+      <div class="cube">
+        <div class="front">Games</div>
+        <div class="back">Settings</div>
+        <div class="right">Memory</div>
+        <div class="left">Controller</div>
+        <div class="top">Audio</div>
+        <div class="bottom">Exit</div>
+      </div>
+    </div>
+  </body>
+</html>

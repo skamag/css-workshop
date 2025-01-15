@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cube</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&family=Righteous&family=Roboto+Mono:wght@100..700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto Mono", "Courier New", Courier, monospace;
+        box-sizing: border-box;
+        color: white;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 100px;
+        overflow: hidden;
+        background-image: linear-gradient(63deg, rgb(40, 40, 40), #111);
+      }
+
+      /* Text section */
+      .text-container .typed-text-wrapper {
+        display: flex;
+      }
+      .text-container .typed-text {
+        width: 0%;
+        color: white;
+        font-size: 3rem;
+        text-wrap: nowrap;
+        overflow-x: hidden;
+        animation: display-text 3s infinite steps(12);
+        animation-delay: 1.5s;
+      }
+      .text-container .typed-text::after {
+        content: "";
+        animation: typing 12s infinite steps(14),
+          typing-colors 12s infinite steps(1);
+        animation-delay: 0s, 1.5s;
+      }
+      .text-container .marker {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+        width: 0rem;
+        animation: marker-blink 1s infinite;
+      }
+
+      /* Cube section */
+      .scene {
+        width: 100px;
+        height: 100px;
+        perspective: 400px;
+      }
+      .cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: cube-float 5s linear infinite;
+        cursor: pointer;
+      }
+      .cube .side {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          ellipse at center,
+          rgba(0, 66, 66, 0.75),
+          rgba(0, 128, 128, 1)
+        );
+        opacity: 0.5;
+        box-shadow: 0 0 10px rgba(31, 31, 48, 1);
+        transition: all 0.5s ease;
+        /* backdrop-filter: blur(1px); */
+      }
+      .front {
+        transform: translateZ(50px);
+      }
+      .back {
+        transform: rotateY(180deg) translateZ(50px);
+      }
+      .right {
+        transform: rotateY(-90deg) translateZ(-50px);
+      }
+      .left {
+        transform: rotateY(90deg) translateZ(-50px);
+      }
+      .top {
+        transform: rotateX(-90deg) translateZ(-50px);
+      }
+      .bottom {
+        transform: rotateX(90deg) translateZ(-50px);
+      }
+
+      /* Snake dots */
+      .dot {
+        display: block;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 0;
+        left: 0;
+        animation: 1.6s dots steps(4) infinite;
+      }
+      .dot-1 {
+        background-color: orangered;
+        animation: 1.6s dots steps(4) infinite, 0.125s fading infinite;
+      }
+      .dot-2 {
+        background-color: rgb(255, 217, 0);
+        animation-delay: 0.1s;
+      }
+      .dot-3 {
+        background-color: rgb(140, 255, 0);
+        animation-delay: 0.2s;
+      }
+      .dot-4 {
+        background-color: rgb(28, 135, 85);
+        animation-delay: 0.3s;
+      }
+      .dot-5 {
+        background-color: rgb(12, 71, 79);
+        animation-delay: 0.4s;
+      }
+
+      /* Header animations */
+      @keyframes display-text {
+        0%,
+        100% {
+          width: 0%;
+        }
+        20% {
+          width: 100%;
+        }
+        80% {
+          width: 100%;
+        }
+      }
+      @keyframes typing {
+        0%,
+        100% {
+          content: "Browser game";
+        }
+        25% {
+          content: "Online store";
+        }
+        50% {
+          content: "iOS/And. app";
+        }
+        75% {
+          content: "Web 2.0 page";
+        }
+      }
+      @keyframes typing-colors {
+        0%,
+        100% {
+          color: #fee440;
+        }
+        25% {
+          color: #00bbf9;
+        }
+        50% {
+          color: #f15bb5;
+        }
+        75% {
+          color: #00f5d4;
+        }
+      }
+      @keyframes marker-blink {
+        0%,
+        100% {
+          font-size: 3rem;
+        }
+        50% {
+          font-size: 0rem;
+        }
+      }
+
+      /* Cube floating animations */
+      @keyframes cube-float {
+        from {
+          transform: rotateX(0deg) rotateY(0);
+        }
+        to {
+          transform: rotateX(360deg) rotateY(360deg);
+        }
+      }
+
+      /* Snake dot animations */
+      @keyframes dots {
+        0%,
+        100% {
+          top: 0;
+          left: 0;
+        }
+        25% {
+          top: 0;
+          left: 80%;
+        }
+        50% {
+          top: 80%;
+          left: 80%;
+        }
+        75% {
+          top: 80%;
+          left: 0;
+        }
+      }
+      @keyframes fading {
+        0%,
+        100% {
+          opacity: 0.75;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="text-container">
+      <div class="text-wrapper">
+        <p class="static-text">Add animations to your</p>
+        <h1 class="typed-text-wrapper">
+          <span class="typed-text"></span>
+          <span class="marker">|</span>
+        </h1>
+      </div>
+    </section>
+    <section class="scene">
+      <div class="cube">
+        <div class="side front"></div>
+        <div class="side back"></div>
+        <div class="side right"></div>
+        <div class="side left"></div>
+        <div class="side top"></div>
+        <div class="side bottom"></div>
+      </div>
+    </section>
+    <script>
+      // Generating snake dots
+      window.onload = () => {
+        const sides = document.querySelectorAll(".side")
+
+        sides.forEach((side) => {
+          for (let i = 0; i < 5; i++) {
+            const dot = document.createElement("span")
+            dot.className = `dot dot-${i + 1}`
+
+            side.appendChild(dot)
+          }
+        })
+      }
+    </script>
+  </body>
+</html>

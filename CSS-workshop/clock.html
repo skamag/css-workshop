@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analog Clock</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #333;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .clock {
+        width: 200px;
+        height: 200px;
+        border: 6px solid #fff;
+        border-radius: 50%;
+        position: relative;
+        background: #000;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      }
+
+      .center {
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+
+      .hour,
+      .minute,
+      .second {
+        position: absolute;
+        width: 50%;
+        height: 6px;
+        background: #fff;
+        top: 50%;
+        transform-origin: 100%;
+        transform: rotate(0deg);
+        border-radius: 3px;
+        left: 50%;
+      }
+
+      .hour {
+        height: 8px;
+        width: 40%;
+        animation: rotate-hour 12s linear infinite;
+      }
+
+      .minute {
+        height: 6px;
+        animation: rotate-minute 6s linear infinite;
+      }
+
+      .second {
+        height: 2px;
+        background: #ff0000;
+        animation: rotate-second 2s linear infinite;
+      }
+
+      @keyframes rotate-hour {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes rotate-minute {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes rotate-second {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="clock">
+      <div class="center"></div>
+      <div class="hour"></div>
+      <div class="minute"></div>
+      <div class="second"></div>
+    </div>
+  </body>
+</html>

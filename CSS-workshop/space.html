@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Infinite Space Travel</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: radial-gradient(circle, #000010, #000000);
+      }
+
+      .space {
+        perspective: 1000px;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1),
+          rgba(255, 255, 255, 0.1)
+        );
+        border-radius: 50%;
+        animation: travel 4s linear infinite;
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+      }
+
+      @keyframes travel {
+        0% {
+          transform: translateZ(-1000px) translateX(0px) translateY(0px);
+          opacity: 0;
+        }
+        5% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateZ(1000px) translateX(var(--moveX))
+            translateY(var(--moveY));
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="space"></div>
+    <script>
+      const space = document.querySelector(".space")
+      const starCount = 300 // Total number of stars
+      const interval = 30 // Delay between star appearances (ms)
+
+      function createStar(index) {
+        const star = document.createElement("div")
+        star.classList.add("star")
+        const moveX = (Math.random() - 0.5) * window.innerWidth * 2 + "px"
+        const moveY = (Math.random() - 0.5) * window.innerHeight * 2 + "px"
+        star.style.setProperty("--moveX", moveX)
+        star.style.setProperty("--moveY", moveY)
+        star.style.animationDelay = `${index * interval}ms` // Even intervals
+        space.appendChild(star)
+      }
+
+      for (let i = 0; i < starCount; i++) {
+        createStar(i)
+      }
+    </script>
+  </body>
+</html>

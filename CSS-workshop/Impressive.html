@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Animation</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        overflow: hidden;
+      }
+
+      .animation-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+      }
+
+      .circle {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+          #ff6f61,
+          #ffab61,
+          #fffb61,
+          #abff61,
+          #61ff6f,
+          #61ffab,
+          #61fffb,
+          #61abff,
+          #6f61ff,
+          #ab61ff,
+          #fb61ff,
+          #ff61ab,
+          #ff6f61
+        );
+        animation: spin 4s linear infinite, pulse 2s ease-in-out infinite;
+      }
+
+      /* Animation for rotation */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Animation for pulsing effect */
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="animation-container">
+      <div class="circle"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glowing Sine Waves</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: black;
+        color: white;
+        height: 100vh;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      canvas {
+        display: block;
+        background: radial-gradient(circle, #111, #000);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .controls {
+        margin-top: 10px;
+        display: flex;
+        gap: 20px;
+      }
+
+      .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: #444;
+        height: 4px;
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px white;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px white;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="waveCanvas" width="800" height="400"></canvas>
+    <div class="controls">
+      <div class="slider-container">
+        <label for="freq1">Frequency 1</label>
+        <input id="freq1" type="range" min="1" max="10" step="0.1" value="2" />
+      </div>
+      <div class="slider-container">
+        <label for="freq2">Frequency 2</label>
+        <input id="freq2" type="range" min="1" max="10" step="0.1" value="3" />
+      </div>
+    </div>
+    <script>
+      const canvas = document.getElementById("waveCanvas")
+      const ctx = canvas.getContext("2d")
+      const freq1Input = document.getElementById("freq1")
+      const freq2Input = document.getElementById("freq2")
+
+      let freq1 = parseFloat(freq1Input.value)
+      let freq2 = parseFloat(freq2Input.value)
+      let offset1 = 0
+      let offset2 = 0
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // First wave
+        ctx.beginPath()
+        for (let x = 0; x < canvas.width; x++) {
+          const y =
+            canvas.height / 2 +
+            Math.sin((x / canvas.width) * freq1 * 2 * Math.PI + offset1) * 50
+          ctx.lineTo(x, y)
+        }
+        ctx.strokeStyle = "rgba(255, 0, 150, 0.7)"
+        ctx.shadowColor = "rgba(255, 0, 150, 0.9)"
+        ctx.shadowBlur = 20
+        ctx.lineWidth = 2
+        ctx.stroke()
+
+        // Second wave
+        ctx.beginPath()
+        for (let x = 0; x < canvas.width; x++) {
+          const y =
+            canvas.height / 2 +
+            Math.sin((x / canvas.width) * freq2 * 2 * Math.PI + offset2) * 50
+          ctx.lineTo(x, y)
+        }
+        ctx.strokeStyle = "rgba(0, 150, 255, 0.7)"
+        ctx.shadowColor = "rgba(0, 150, 255, 0.9)"
+        ctx.shadowBlur = 20
+        ctx.lineWidth = 2
+        ctx.stroke()
+
+        offset1 += 0.02
+        offset2 += 0.015
+      }
+
+      function animate() {
+        draw()
+        requestAnimationFrame(animate)
+      }
+
+      freq1Input.addEventListener("input", () => {
+        freq1 = parseFloat(freq1Input.value)
+      })
+
+      freq2Input.addEventListener("input", () => {
+        freq2 = parseFloat(freq2Input.value)
+      })
+
+      animate()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glowing Particles Animation</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .particle {
+        position: absolute;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0) 80%
+        );
+        border-radius: 50%;
+        animation: move 5s infinite linear;
+        filter: blur(3px);
+      }
+
+      @keyframes move {
+        0% {
+          transform: translate(
+            calc(100vw * var(--start-x)),
+            calc(100vh * var(--start-y))
+          );
+        }
+        100% {
+          transform: translate(
+            calc(100vw * var(--end-x)),
+            calc(100vh * var(--end-y))
+          );
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const numParticles = 50
+      const particles = []
+
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement("div")
+        particle.className = "particle"
+
+        const startX = Math.random()
+        const startY = Math.random()
+        const endX = Math.random()
+        const endY = Math.random()
+
+        const size = Math.random() * 10 + 5 // Particle size between 5px and 15px
+        particle.style.width = `${size}px`
+        particle.style.height = `${size}px`
+        particle.style.setProperty("--start-x", startX)
+        particle.style.setProperty("--start-y", startY)
+        particle.style.setProperty("--end-x", endX)
+        particle.style.setProperty("--end-y", endY)
+
+        // Larger particles move faster
+        particle.style.animationDuration = `${5 - (size / 15) * 3}s`
+        particle.style.animationDelay = `${Math.random() * -5}s`
+        particle.style.backgroundColor = `hsl(${
+          Math.random() * 360
+        }, 100%, 70%)`
+
+        document.body.appendChild(particle)
+        particles.push({ element: particle, size })
+      }
+
+      // Mouse movement interaction
+      let mouseX = 0
+      let mouseY = 0
+
+      //   document.addEventListener("mousemove", (e) => {
+      //     mouseX = e.clientX / window.innerWidth
+      //     mouseY = e.clientY / window.innerHeight
+
+      //     particles.forEach(({ element, size }) => {
+      //       const offsetX = (mouseX - 0.5) * size * 0.5 // Movement based on size
+      //       const offsetY = (mouseY - 0.5) * size * 0.5
+      //       const computedStyle = getComputedStyle(element)
+
+      //       const startX = parseFloat(computedStyle.getPropertyValue("--start-x"))
+      //       const startY = parseFloat(computedStyle.getPropertyValue("--start-y"))
+
+      //       element.style.setProperty("--start-x", startX + offsetX)
+      //       element.style.setProperty("--start-y", startY + offsetY)
+      //     })
+      //   })
+
+      // Parallax scrolling interaction
+      document.addEventListener("scroll", () => {
+        const scrollY = window.scrollY / window.innerHeight
+
+        particles.forEach(({ element, size }) => {
+          const offsetY = scrollY * size * 0.1 // Parallax effect based on size
+          const computedStyle = getComputedStyle(element)
+
+          const startY = parseFloat(computedStyle.getPropertyValue("--start-y"))
+          element.style.setProperty("--start-y", startY + offsetY)
+        })
+      })
+    </script>
+  </body>
+</html>

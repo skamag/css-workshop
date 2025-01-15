@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Courier New", Courier, monospace;
+        /* font-family: sans-serif; */
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        padding: 0 20%;
+        /* background-color: pink; */
+      }
+      .text-container {
+        display: flex;
+        flex-direction: column;
+        /* background-color: aqua; */
+      }
+      .static-text {
+        font-size: 1rem;
+      }
+      .typed-text-container {
+        display: flex;
+        width: fit-content;
+        /* background-color: yellow; */
+      }
+      .text-container .typed-text {
+        /* position: absolute; */
+        font-size: 4rem;
+        text-wrap: nowrap;
+        width: 0%;
+        overflow-x: hidden;
+      }
+      .typed-text-1 {
+        animation: typing 3s infinite steps(13);
+        animation-delay: 0.75s;
+      }
+      .typed-text-1::after {
+        content: "";
+        height: 4rem;
+        width: 2rem;
+        animation: test 6s infinite;
+      }
+      .typed-text-2 {
+        animation: typing 6s infinite steps(14);
+      }
+      .marker {
+        width: 0.25rem;
+        font-size: 4rem;
+        animation: marker-blink 1s infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      @keyframes typing {
+        0%,
+        100% {
+          width: 0%;
+        }
+        30%,
+        80% {
+          width: 100%;
+        }
+      }
+      /* @keyframes typing {
+        0%,
+        50%,
+        100% {
+          width: 0%;
+        }
+        15%,
+        40% {
+          width: 100%;
+        }
+      } */
+      @keyframes marker-blink {
+        0%,
+        100% {
+          font-size: 4rem;
+        }
+        50% {
+          font-size: 0rem;
+        }
+      }
+      @keyframes test {
+        0%,
+        100% {
+          /* content: "Portfolio"; */
+          content: "Personal site";
+        }
+        50% {
+          /* content: "Nettbutikk"; */
+          content: "Online stores";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="text-container">
+      <!-- <p class="static-text">Snasne animasjoner til din</p> -->
+      <p class="static-text">Add 3D animations to your</p>
+      <div class="typed-text-container">
+        <h1 class="typed-text typed-text-1"></h1>
+        <!-- <h1 class="typed-text typed-text-2">Online store</h1> -->
+        <h1 class="marker">|</h1>
+      </div>
+    </section>
+  </body>
+</html>
